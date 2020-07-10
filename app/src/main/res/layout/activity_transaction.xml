@@ -7,7 +7,7 @@
     android:background="@drawable/signup_bg"
     android:orientation="vertical"
     tools:context=".dashboard.TransactionActivity">
-    <include layout="@layout/activity_header_layout" android:id="@+id/headerLayout">
+    <include layout="@layout/activity_header_layout" android:visibility="gone" android:id="@+id/headerLayout">
     </include>
     <ProgressBar
         android:id="@+id/progressBar"
@@ -17,7 +17,7 @@
         android:visibility="gone"></ProgressBar>
     <RelativeLayout
         android:id="@+id/qrCodeRL"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="180dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -43,6 +43,8 @@
     </RelativeLayout>
 
 <RelativeLayout
+    android:visibility="gone"
+    android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/transactionRL"
@@ -296,7 +298,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6"
                         android:text="-"
-                        android:textColor="@color/colorAccent"
                         android:textSize="12dp" />
                 </LinearLayout>
 
@@ -329,7 +330,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6"
                         android:text="-"
-                        android:textColor="@color/colorAccent"
                         android:textSize="12dp" />
                 </LinearLayout>
 
@@ -362,7 +362,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6"
                         android:text="-"
-                        android:textColor="@color/colorAccent"
                         android:textSize="12dp" />
                 </LinearLayout>
 
@@ -372,7 +371,7 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/submitButton"
         android:layout_width="100dp"
         android:layout_height="35dp"
         android:layout_marginTop="20dp"

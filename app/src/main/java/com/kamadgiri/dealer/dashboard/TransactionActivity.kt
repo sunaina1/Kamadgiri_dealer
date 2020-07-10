@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -49,6 +50,7 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
     lateinit var productIdTV: TextView
     lateinit var lotNumberTV: TextView
     lateinit var labelNumberTV: TextView
+    lateinit var submitButton: Button
     lateinit var transactionRL: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +66,6 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
         userId = ProjectPreference.getSharedPreferenceData(AppConstant.LOGIN_RESPONSE_CONTENT, context)
         addTransactionRequestModel = AddTransactionRequestModel()
         progressBar = findViewById(R.id.progressBar)
-        text = findViewById(R.id.text)
         activityTitleTV = findViewById(R.id.activityTitleTV)
         activityTitleTV.setText("Transaction")
         backIV = findViewById(R.id.backIV)
@@ -85,6 +86,12 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
         lotNumberTV = findViewById(R.id.lotNumberTV)
         transactionRL = findViewById(R.id.transactionRL)
         transactionRL.visibility = View.GONE
+        submitButton = findViewById(R.id.submitButton)
+
+
+        submitButton.setOnClickListener(View.OnClickListener {
+            submitTrasactionData()
+        })
     }
 
 
@@ -108,7 +115,12 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
                             "update profile response " + Gson().toJson(response.body())
                         )
                         config.hideProgress(progressBar, transactionActivity)
-
+                        config.customAlertOk(
+                            AppConstant.INFO,
+                            response.body()!!.msg,
+                            AppConstant.OK,
+                            context,AppConstant.FINISH_CURRENT
+                        )
                     } else {
                         config.hideProgress(progressBar, transactionActivity)
 
@@ -183,17 +195,43 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
 // qr code result
     }
     private fun CallCamera() {
+
         mScannerView.setResultHandler(this)
         mScannerView.startCamera()
     }
 
     override fun handleResult(result: Result?) {
-        var pay_num = result?.text
-        Log.d("qrcode",pay_num);
-        text.setText(pay_num)
-
+        var transactionData = result?.text
+        Log.d("qrcode",transactionData);
+        var transactionResult =  transactionData!!.split("/")
         transactionRL.visibility = View.VISIBLE
+        labelNumberTV.setText(transactionResult[0])
+        cropTV.setText(transactionResult[1])
+        lotNumberTV.setText(transactionResult[2])
+        productNameTV.setText(transactionResult[3])
+        productIdTV.setText(transactionResult[4])
+        batchNumberTV.setText(transactionResult[5])
+        packetsWeightTV.setText(transactionResult[6])
+        packetsInsideTV.setText(transactionResult[7])
+        bagWeightTV.setText(transactionResult[8])
 
+
+        addTransactionRequestModel.labelNo = labelNumberTV.text.toString()
+        addTransactionRequestModel.crop = cropTV.text.toString()
+        addTransactionRequestModel.lotNo = lotNumberTV.text.toString()
+        addTransactionRequestModel.productName = productNameTV.text.toString()
+        addTransactionRequestModel.productId = productIdTV.text.toString()
+        addTransactionRequestModel.batchNo = batchNumberTV.text.toString()
+        addTransactionRequestModel.packetWeight = packetsWeightTV.text.toString()
+        addTransactionRequestModel.packetsInside = packetsInsideTV.text.toString()
+        addTransactionRequestModel.bagWeight = bagWeightTV.text.toString()
+        addTransactionRequestModel.userId = userId
+
+        val handler = Handler()
+        handler.postDelayed(
+            { mScannerView.resumeCameraPreview(transactionActivity) },
+            1000
+        )
     }
 
     override fun onResume() {

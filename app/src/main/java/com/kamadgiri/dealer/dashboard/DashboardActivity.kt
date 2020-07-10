@@ -48,4 +48,8 @@ class DashboardActivity : AppCompatActivity() {
             context.startActivity(intent)
         })
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
 }

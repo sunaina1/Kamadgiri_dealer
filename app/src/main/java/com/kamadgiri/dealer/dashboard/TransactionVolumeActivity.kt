@@ -110,7 +110,9 @@ class TransactionVolumeActivity : AppCompatActivity() {
                             noTrasactionDataTV.visibility = View.GONE
                             recyclerRL.visibility = View.VISIBLE
                             refreshRecordDetails(response.body()!!.transactions)
-                        }else{
+                        }
+
+                        if(response.body()!!.transactions == null || response.body()!!.transactions.size <= 0) {
                             noTrasactionDataTV.visibility = View.VISIBLE
                             recyclerRL.visibility = View.GONE
                         }
