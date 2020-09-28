@@ -132,7 +132,7 @@ class TransactionVolumeActivity : AppCompatActivity() {
 
                     config.customAlertOk(
                         AppConstant.INFO,
-                        response.body()!!.msg,
+                        "Internal server error",
                         AppConstant.OK,
                         context
                     )

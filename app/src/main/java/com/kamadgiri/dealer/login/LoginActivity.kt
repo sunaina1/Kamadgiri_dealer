@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
         setupUI()
     }
 
-    private fun setupUI(){
+    private fun setupUI() {
         loginActivity = this
         context = this
         loginRequestModel = LoginRequestModel()
@@ -72,14 +72,15 @@ class LoginActivity : AppCompatActivity() {
 
         registerTV.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, RegisterActivity::class.java)
-            context.startActivity(intent)
+            startActivity(intent)
+            finish()
         })
 
 
         loginButton = findViewById(R.id.loginButton)
         loginButton.setOnClickListener(View.OnClickListener {
 
-            if(emailTV.text.toString()!= "") {
+            if (emailTV.text.toString() != "") {
                 if (!isValidEmail(emailTV.text.toString())) {
                     config.customAlertOk(
                         AppConstant.INFO,
@@ -89,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
                     )
                     return@OnClickListener
                 }
-            }else{
+            } else {
                 config.customAlertOk(
                     AppConstant.INFO,
                     "Please enter email address",
@@ -99,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
                 return@OnClickListener
             }
 
-            if(passwordTV.text.toString() == ""){
+            if (passwordTV.text.toString() == "") {
                 config.customAlertOk(
                     AppConstant.INFO,
                     "Please enter password",
@@ -108,16 +109,16 @@ class LoginActivity : AppCompatActivity() {
                 )
                 return@OnClickListener
             }
-          /*  val intent = Intent(context, DashboardActivity::class.java)
+            /*  val intent = Intent(context, DashboardActivity::class.java)
             context.startActivity(intent)*/
             loginRequestModel.email = emailTV.text.toString()
             loginRequestModel.password = passwordTV.text.toString()
 
 
-            if(config.isNetworkAvailable(context)){
+            if (config.isNetworkAvailable(context)) {
                 getLogin()
 
-            }else{
+            } else {
                 config.customAlertOk(
                     AppConstant.INFO,
                     "Internet connection is not available.Please try again.",
@@ -136,8 +137,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun getLogin() {
-        config.showProgress(progressBar,loginActivity)
-        var apiInterface= RetrofitInstanceNative().retrofitInstance.create(ApiInterface::class.java)
+        config.showProgress(progressBar, loginActivity)
+        var apiInterface =
+            RetrofitInstanceNative().retrofitInstance.create(ApiInterface::class.java)
 
         val call: Call<LoginResponseModel> =
             apiInterface.getLogin(loginRequestModel)
@@ -148,39 +150,41 @@ class LoginActivity : AppCompatActivity() {
                 response: Response<LoginResponseModel?>
             ) {
                 if (response.isSuccessful()) {
-                      if (response.body()!!.statusCode == AppConstant.SUCCESS_CODE) {
-                          Log.d(
-                              "request_res",
-                              "after otp " + Gson().toJson(response.body())
-                          )
-                          config.hideProgress(progressBar, loginActivity)
-                          ProjectPreference.saveSharedPreferenceData(AppConstant.TOKEN,
-                              response.body()!!.token, context);
-                          ProjectPreference.saveSharedPreferenceData(AppConstant.LOGIN_RESPONSE_CONTENT,
-                              response.body()!!.user._id, context);
-                          val intent = Intent(loginActivity, DashboardActivity::class.java)
-                          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                          startActivity(intent)
-                          finish()
+                    if (response.body()!!.statusCode == AppConstant.SUCCESS_CODE) {
+                        Log.d(
+                            "request_res",
+                            "after otp " + Gson().toJson(response.body())
+                        )
+                        config.hideProgress(progressBar, loginActivity)
+                        ProjectPreference.saveSharedPreferenceData(
+                            AppConstant.TOKEN,
+                            response.body()!!.token, context
+                        );
+                        ProjectPreference.saveSharedPreferenceData(
+                            AppConstant.LOGIN_RESPONSE_CONTENT,
+                            response.body()!!.user._id, context
+                        );
+                        val intent = Intent(loginActivity, DashboardActivity::class.java)
+                        startActivity(intent)
+                        finish()
 
-                      }else{
-                          config.hideProgress(progressBar, loginActivity)
+                    } else {
+                        config.hideProgress(progressBar, loginActivity)
 
-                          config.customAlertOk(
-                              AppConstant.INFO,
-                              response.body()!!.msg,
-                              AppConstant.OK,
-                              context
-                          )
-                      }
+                        config.customAlertOk(
+                            AppConstant.INFO,
+                            response.body()!!.msg,
+                            AppConstant.OK,
+                            context
+                        )
+                    }
 
                 } else {
                     config.hideProgress(progressBar, loginActivity)
 
                     config.customAlertOk(
                         AppConstant.INFO,
-                        response.body()!!.msg,
+                        "Internal server error",
                         AppConstant.OK,
                         context
                     )
@@ -202,5 +206,15 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onBackPressed() {
+        var intent = Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish()
+       // super.onBackPressed()
     }
 }

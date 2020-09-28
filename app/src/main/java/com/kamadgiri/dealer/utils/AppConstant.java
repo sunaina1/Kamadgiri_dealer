@@ -1,5 +1,9 @@
 package com.kamadgiri.dealer.utils;
 
+import android.content.Context;
+
+import com.kamadgiri.dealer.dashboard.PointSummaryActivity;
+
 public interface AppConstant {
     String HEADER_TOKEN = "Authorization";
     String FINISH_CURRENT = "finishCurrent";
@@ -14,6 +18,10 @@ public interface AppConstant {
     int FAILURE_CODE = 404;
     String INFO = "Info";
     String DATE_FORMATE = "dd/MM/yyyy";
+
+    String POINT_SUMMARY = "http://148.72.213.116:3000/api/wallet/userhistory/get/";
+
+
 
 
 }

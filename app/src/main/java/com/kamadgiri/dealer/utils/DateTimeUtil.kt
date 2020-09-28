@@ -1,12 +1,14 @@
 package com.example.tc.utils
 
 import android.util.Log
+import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 
 class DateTimeUtil {
-    /* fun formateDate(dateString : String):String{
+     fun formateDate1(dateString : String):String{
          try {
-             var format : DateFormat= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
+             var format : DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ENGLISH);
             // DateFormat format = new SimpleDateFormat(, );
              var date: Date= format.parse(dateString);
              var format1 : DateFormat= SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
@@ -18,7 +20,7 @@ class DateTimeUtil {
              e.printStackTrace();
          }
          return "";
-     }*/
+     }
     fun formateDate(dateString: String): String {
         val parts = dateString.split("T");
         return parts[0]

@@ -7,6 +7,7 @@ package com.kamadgiri.dealer.networkReq;
 import com.kamadgiri.dealer.model.addTransaction.AddTransactionRequestModel;
 import com.kamadgiri.dealer.model.login.LoginRequestModel;
 import com.kamadgiri.dealer.model.login.LoginResponseModel;
+import com.kamadgiri.dealer.model.pointSummary.PointSummaryResponseModel;
 import com.kamadgiri.dealer.model.profile.GetProfileResponseModel;
 import com.kamadgiri.dealer.model.profile.UpdateProfileRequestModel;
 import com.kamadgiri.dealer.model.profile.UpdateProfileResponseModel;
@@ -14,6 +15,7 @@ import com.kamadgiri.dealer.model.register.RegisterRequestModel;
 import com.kamadgiri.dealer.model.register.RegisterResponseModel;
 import com.kamadgiri.dealer.model.transactionVolume.TransactionVolumeRequestModel;
 import com.kamadgiri.dealer.model.transactionVolume.TransactionVolumeResponseModel;
+import com.kamadgiri.dealer.utils.AppConstant;
 
 import java.util.Map;
 
@@ -22,13 +24,21 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
+import retrofit2.http.Url;
 
 public interface ApiInterface {
+
 
     //Get Profile
     @GET("api/dealership/user/get")
         // TODO Register fragment onCreate ()
     Call<GetProfileResponseModel> getUserProfile(@HeaderMap Map<String, String> map);
+
+    @GET
+        // TODO Register fragment onCreate ()
+    Call<PointSummaryResponseModel> getPointSummary(@Url String url);
 
     @POST("api/dealership/user/login")
         // TODO Register fragment onCreate ()

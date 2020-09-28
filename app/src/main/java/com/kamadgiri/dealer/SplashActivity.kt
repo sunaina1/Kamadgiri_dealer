@@ -39,14 +39,16 @@ class SplashActivity : AppCompatActivity() {
 
             if(loginResponse!=""){
                 config.hideProgress(progressBar,splashActivity)
-                finish()
+                //finish()
                 val intent = Intent(context, DashboardActivity::class.java)
                 context.startActivity(intent)
+                finish()
             }else{
                 config.hideProgress(progressBar,splashActivity)
-                finish()
+                //finish()
                 val intent = Intent(context, LoginActivity::class.java)
-                context.startActivity(intent)
+                startActivity(intent)
+                finish()
 
             }
         }, 2000)

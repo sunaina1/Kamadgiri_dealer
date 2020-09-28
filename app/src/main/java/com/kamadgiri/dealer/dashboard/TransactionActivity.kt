@@ -52,6 +52,7 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
     lateinit var labelNumberTV: TextView
     lateinit var submitButton: Button
     lateinit var transactionRL: RelativeLayout
+    var crop: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +64,8 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
         transactionActivity = this
         context = this
         config = Config()
-        userId = ProjectPreference.getSharedPreferenceData(AppConstant.LOGIN_RESPONSE_CONTENT, context)
+        userId =
+            ProjectPreference.getSharedPreferenceData(AppConstant.LOGIN_RESPONSE_CONTENT, context)
         addTransactionRequestModel = AddTransactionRequestModel()
         progressBar = findViewById(R.id.progressBar)
         activityTitleTV = findViewById(R.id.activityTitleTV)
@@ -73,23 +75,39 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
             finish()
         })
         content_frame = findViewById(R.id.content_frame)
-        mScannerView = ZXingScannerView(this)
-        content_frame.addView(mScannerView)
-        productNameTV = findViewById(R.id.productNameTV) 
-        batchNumberTV = findViewById(R.id.batchNumberTV) 
-        cropTV = findViewById(R.id.cropTV) 
-        packetsInsideTV = findViewById(R.id.packetsInsideTV) 
-        packetsWeightTV = findViewById(R.id.packetsWeightTV) 
+
+        productNameTV = findViewById(R.id.productNameTV)
+        batchNumberTV = findViewById(R.id.batchNumberTV)
+        cropTV = findViewById(R.id.cropTV)
+        packetsInsideTV = findViewById(R.id.packetsInsideTV)
+        packetsWeightTV = findViewById(R.id.packetsWeightTV)
         bagWeightTV = findViewById(R.id.bagWeightTV)
         labelNumberTV = findViewById(R.id.labelNumberTV)
         productIdTV = findViewById(R.id.productIdTV)
         lotNumberTV = findViewById(R.id.lotNumberTV)
         transactionRL = findViewById(R.id.transactionRL)
         transactionRL.visibility = View.GONE
+        mScannerView = ZXingScannerView(this)
+        content_frame.addView(mScannerView)
         submitButton = findViewById(R.id.submitButton)
-
+        /* var transactionData = "111/Bajra/451/Crop-Demo/121/51/4kg/7/5kg"
+         var transactionResult =  transactionData!!.split("/")
+         if (transactionData != null) {
+             transactionRL.visibility = View.VISIBLE
+             labelNumberTV.setText(transactionResult[0])
+         }*/
 
         submitButton.setOnClickListener(View.OnClickListener {
+            addTransactionRequestModel.labelNo = labelNumberTV.text.toString()
+            addTransactionRequestModel.crop = cropTV.text.toString()
+            addTransactionRequestModel.lotNo = lotNumberTV.text.toString()
+            addTransactionRequestModel.productName = productNameTV.text.toString()
+            addTransactionRequestModel.productId = productIdTV.text.toString()
+            addTransactionRequestModel.batchNo = batchNumberTV.text.toString()
+            addTransactionRequestModel.packetWeight = packetsWeightTV.text.toString()
+            addTransactionRequestModel.packetsInside = packetsInsideTV.text.toString()
+            addTransactionRequestModel.bagWeight = bagWeightTV.text.toString()
+            addTransactionRequestModel.userId = userId
             submitTrasactionData()
         })
     }
@@ -119,7 +137,7 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
                             AppConstant.INFO,
                             response.body()!!.msg,
                             AppConstant.OK,
-                            context,AppConstant.FINISH_CURRENT
+                            context, AppConstant.FINISH_CURRENT
                         )
                     } else {
                         config.hideProgress(progressBar, transactionActivity)
@@ -137,7 +155,7 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
 
                     config.customAlertOk(
                         AppConstant.INFO,
-                        response.body()!!.msg,
+                        "Internal server error",
                         AppConstant.OK,
                         context
                     )
@@ -168,7 +186,7 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(
                     arrayOf(Manifest.permission.CAMERA),
-                   PERMISSION_REQUEST_CODE
+                    PERMISSION_REQUEST_CODE
                 )
             } else {
                 CallCamera()
@@ -177,6 +195,7 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
             CallCamera()
         }
     }
+
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -189,43 +208,64 @@ class TransactionActivity : AppCompatActivity(), ZXingScannerView.ResultHandler 
 
             }
         }
+
         /*if (requestCode == 13) {
             CallCamera();
         }*/
 // qr code result
     }
+
     private fun CallCamera() {
 
         mScannerView.setResultHandler(this)
         mScannerView.startCamera()
     }
 
+
     override fun handleResult(result: Result?) {
         var transactionData = result?.text
-        Log.d("qrcode",transactionData);
-        var transactionResult =  transactionData!!.split("/")
-        transactionRL.visibility = View.VISIBLE
-        labelNumberTV.setText(transactionResult[0])
-        cropTV.setText(transactionResult[1])
-        lotNumberTV.setText(transactionResult[2])
-        productNameTV.setText(transactionResult[3])
-        productIdTV.setText(transactionResult[4])
-        batchNumberTV.setText(transactionResult[5])
-        packetsWeightTV.setText(transactionResult[6])
-        packetsInsideTV.setText(transactionResult[7])
-        bagWeightTV.setText(transactionResult[8])
+        Log.d("qrcode", transactionData);
+        if (transactionData != null && !transactionData.equals("")) {
+            var transactionResult = transactionData!!.split("/")
+            transactionRL.visibility = View.VISIBLE
+            if (transactionResult[0] != null) {
+                labelNumberTV.setText(transactionResult[0])
+            }
+            if (transactionResult[1] != null) {
+                cropTV.setText(transactionResult[1])
+            }
+            if (transactionResult[2] != null) {
+                lotNumberTV.setText(transactionResult[2])
+            }
+            if (transactionResult[3] != null) {
+                productNameTV.setText(transactionResult[3])
+            }
+            if (transactionResult[4] != null) {
+                productIdTV.setText(transactionResult[4])
+            }
+            if (transactionResult[5] != null) {
+                batchNumberTV.setText(transactionResult[5])
+            }
+            if (transactionResult[6] != null) {
+                packetsWeightTV.setText(transactionResult[6])
+            }
+            if (transactionResult[7] != null) {
+                packetsInsideTV.setText(transactionResult[7])
+            }
+            if (transactionResult[8] != null) {
+                bagWeightTV.setText(transactionResult[8])
+            }
+        }
+        /* labelNumberTV.setText(transactionResult[0])
+         cropTV.setText(transactionResult[1])
+         lotNumberTV.setText(transactionResult[2])
+         productNameTV.setText(transactionResult[3])
+         productIdTV.setText(transactionResult[4])
+         batchNumberTV.setText(transactionResult[5])
+         packetsWeightTV.setText(transactionResult[6])
+         packetsInsideTV.setText(transactionResult[7])
+         bagWeightTV.setText(transactionResult[8])*/
 
-
-        addTransactionRequestModel.labelNo = labelNumberTV.text.toString()
-        addTransactionRequestModel.crop = cropTV.text.toString()
-        addTransactionRequestModel.lotNo = lotNumberTV.text.toString()
-        addTransactionRequestModel.productName = productNameTV.text.toString()
-        addTransactionRequestModel.productId = productIdTV.text.toString()
-        addTransactionRequestModel.batchNo = batchNumberTV.text.toString()
-        addTransactionRequestModel.packetWeight = packetsWeightTV.text.toString()
-        addTransactionRequestModel.packetsInside = packetsInsideTV.text.toString()
-        addTransactionRequestModel.bagWeight = bagWeightTV.text.toString()
-        addTransactionRequestModel.userId = userId
 
         val handler = Handler()
         handler.postDelayed(

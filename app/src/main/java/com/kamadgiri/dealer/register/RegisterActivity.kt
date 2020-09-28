@@ -227,7 +227,7 @@ Log.d("request",registerRequestModel.serialize())
 
                     config.customAlertOk(
                         AppConstant.INFO,
-                        response.body()!!.msg,
+                       "Internal server error",
                         AppConstant.OK,
                         context
                     )

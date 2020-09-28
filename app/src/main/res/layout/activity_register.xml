@@ -150,7 +150,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-
             <EditText
                 android:id="@+id/stateET"
                 android:layout_width="match_parent"

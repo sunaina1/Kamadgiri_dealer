@@ -5,7 +5,7 @@ import java.io.Serializable
 
 class TransactionVolumeRequestModel: Serializable {
     lateinit var userId: String
-constructor()
+    constructor()
     constructor(userId: String) {
         this.userId = userId
     }

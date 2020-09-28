@@ -14,13 +14,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".dashboard.TransactionVolumeActivity"></activity>
-        <activity android:name=".dashboard.PointSummaryActivity" />
-        <activity android:name=".dashboard.TransactionActivity" />
+        <activity android:name=".dashboard.TransactionVolumeActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".dashboard.PointSummaryActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".dashboard.TransactionActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".dashboard.ProfileActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".dashboard.DashboardActivity" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".dashboard.DashboardActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".register.RegisterActivity"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize"
@@ -33,7 +38,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.LoginActivity" />
+        <activity android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
